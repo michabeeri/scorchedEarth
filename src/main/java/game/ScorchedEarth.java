@@ -10,5 +10,6 @@ public class ScorchedEarth {
 		mainScene.add(new GameObject());
 		mainScene.add(new GameObject());
 		gameEngine.load(mainScene);
+		gameEngine.render();
 	}
 }

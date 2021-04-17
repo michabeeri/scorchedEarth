@@ -8,12 +8,16 @@ public class Engine {
 
     public void load(Scene scene) {
         gameObjects = scene.getGameObjects();
-        render();
     }
 
     public void render() {
         gameObjects.stream().forEach(go -> go.render());
     }
+
+    public String toString() {
+        return gameObjects.toString();
+    }
+
     public void gameLoop() {
 
     }

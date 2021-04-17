@@ -17,6 +17,6 @@ public class GameObject {
     }
 
     public void render() {
-        System.out.println("GameObject: " + this);
+        System.out.println("rendering: " + this);
     }
 }
