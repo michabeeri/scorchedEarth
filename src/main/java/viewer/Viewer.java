@@ -8,12 +8,14 @@ import java.awt.*;
 
 public class Viewer {
     private Canvas canvas;
+    private Dimension dimension;
 
-    public Viewer(int width, int height) {
+    public Viewer(Dimension dimension) {
+        this.dimension = dimension;
         JFrame frame = new JFrame();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        canvas = new Canvas(width, height);
+        canvas = new Canvas(dimension);
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -22,17 +24,21 @@ public class Viewer {
     public void setImage(BufferedImage bi) {
         canvas.setImage(bi);
     }
+
+    public Dimension getDimention() {
+        return dimension;
+    }
 }
 
 class Canvas extends JPanel {
     BufferedImage image;
 
-    public Canvas(int width, int height) {
-        this.setPreferredSize(new Dimension(width, height));
+    public Canvas(Dimension dimension) {
+        this.setPreferredSize(dimension);
     }
 
     protected void paintComponent(Graphics g) {
-        System.out.println(this.image);
+        System.out.println("viewer::paintComponent " + this.image);
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
     }

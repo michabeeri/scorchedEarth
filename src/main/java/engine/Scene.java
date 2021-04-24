@@ -7,12 +7,12 @@ public class Scene {
     private List<GameObject> gameObjects = new ArrayList<>();
 
     public void add(GameObject go) {
-        gameObjects.add(new GameObject(go));
+        gameObjects.add(go);
     }
 
-    public List<GameObject> getGameObjects() {
+    public List<GameObject> copyGameObjects() {
         return gameObjects.stream()
-                .map(go -> new GameObject(go))
+                .map(go -> go.clone())
                 .collect(Collectors.toList());
     }
 }

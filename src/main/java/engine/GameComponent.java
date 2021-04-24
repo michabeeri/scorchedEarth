@@ -1,8 +1,7 @@
 package engine;
 
 public class GameComponent {
-
-    public GameComponent(GameComponent other) {
-
+    public GameComponent clone() {
+        return new GameComponent();
     }
 }

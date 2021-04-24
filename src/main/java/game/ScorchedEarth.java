@@ -2,54 +2,49 @@ package game;
 
 import engine.*;
 import viewer.*;
-import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import java.awt.*;
-import java.io.File;
-import java.io.*;
-import java.util.concurrent.TimeUnit;
-import javax.imageio.ImageIO;
 
 public class ScorchedEarth {
-	private static BufferedImage loadImage(String filename) {
+
+	public static void main(String args[]) {
+		System.out.println("Scorched started");
+		var dimention = new Dimension(900, 420);
+		var viewer = new Viewer(dimention);
+		var gameEngine = new Engine(viewer);
+		var mainScene = new Scene();
+
+		var backgroundSprite = new Sprite("src/main/resources/background.jpg");
+//		var spaceshipSprite = new Sprite("src/main/resources/spaceship.png");
+
 		try {
-			var file = new File(filename);
-//            var fs = new FileInputStream(file);
-			var img = ImageIO.read(file);
-			return img;
-		} catch (IOException e) {
+			backgroundSprite.load();
+//			spaceshipSprite.load();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return null;
-	}
-	public static void main(String args[]){
-		System.out.println("Scorched started");
-//		var gameEngine = new Engine();
-//		var mainScene = new Scene();
-//		mainScene.add(new GameObject());
-//		mainScene.add(new GameObject());
-//		gameEngine.load(mainScene);
-//		gameEngine.render();
-		var img1 = loadImage("src/main/resources/pixelArt1.jpg");
-		var img2 = loadImage("src/main/resources/pixelArt2.png");
-		var viewer = new Viewer(900, 420);
-		viewer.setImage(img2);
+		var background = new GameObject();
+		var backgroundRenderer = new SpriteRenderer(backgroundSprite, new Rectangle2D.Double(0, 0, 900, 420));
+		background.addComponent(backgroundRenderer);
+		mainScene.add(background);
 
-		try
-		{
-			TimeUnit.SECONDS.sleep(1);
-		}
-		catch(InterruptedException ex)
-		{
-			Thread.currentThread().interrupt();
-		}
+//		var spaceship = new GameObject();
+//		var spaceshipRenderer = new SpriteRenderer(spaceshipSprite, new Rectangle2D.Double(0, 0, 840, 601));
+//		background.addComponent(backgroundRenderer);
+//		mainScene.add(background);
 
-		System.out.println("here");
-		viewer.setImage(img1);
+		gameEngine.load(mainScene);
+		gameEngine.render();
+
+//		try
+//		{
+//			TimeUnit.SECONDS.sleep(1);
+//		}
+//		catch(InterruptedException ex)
+//		{
+//			Thread.currentThread().interrupt();
+//		}
+
 	}
 }
