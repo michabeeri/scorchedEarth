@@ -1,6 +1,5 @@
 package engine;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -9,11 +8,13 @@ import viewer.*;
 
 public class Engine {
     private Viewer viewer;
+    private Camera camera;
     private List<GameObject> gameObjects = new ArrayList<>();
     private BufferedImage rendererd;
 
-    public Engine(Viewer viewer) {
+    public Engine(Viewer viewer, Camera camera) {
         this.viewer = viewer;
+        this.camera = camera;
     }
 
     public void load(Scene scene) {
@@ -21,15 +22,14 @@ public class Engine {
     }
 
     public void render() {
-        var dimension = viewer.getDimention();
-        var renderedNext = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_RGB);
+        var screenbSize = viewer.getDimention();
+        var renderedNext = new BufferedImage(screenbSize.width, screenbSize.height, BufferedImage.TYPE_INT_RGB);
         var graphicContext = renderedNext.createGraphics();
 
-        var userSpace = new Rectangle2D.Double(0, 0, dimension.width, dimension.height);
+        var worldToScreen = camera.getWorldToScreenTransform(screenbSize);
         gameObjects.stream()
-//            .sorted((go1, go2) -> Double.compare(go1.z, go2.z))
-            .flatMap(gameObject -> gameObject.getComponentsOfType(SpriteRenderer.class))
-            .forEach(spriteRenderer -> spriteRenderer.render(graphicContext, userSpace));
+            .sorted(Comparator.comparingDouble(go -> - go.getTransform().getZ())) // camera in on negative z, higher z values are further away from the camera
+            .forEach(gameObject -> gameObject.render(graphicContext, worldToScreen));
 
         graphicContext.dispose();
         rendererd = renderedNext;

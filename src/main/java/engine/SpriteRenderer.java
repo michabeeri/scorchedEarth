@@ -21,11 +21,14 @@ public class SpriteRenderer extends GameComponent{
         );
     }
 
-    public void render(Graphics2D graphics, Rectangle2D.Double userSpace) {
-        var transform = new AffineTransform();
-        transform.scale(userSpace.width / imageSpace.width, userSpace.height / imageSpace.height);
-        transform.translate(userSpace.x - imageSpace.x, userSpace.y - imageSpace.y);
-        sprite.render(graphics, transform);
+    public void render(Graphics2D graphics, AffineTransform localToScreen) {
+        var spriteToScreen = new AffineTransform(localToScreen);
+
+        // normalize image, center and resize height to 1
+        spriteToScreen.scale(1 / imageSpace.height, 1 / imageSpace.height);
+        spriteToScreen.translate( - imageSpace.width / 2,  - imageSpace.height / 2);
+
+        sprite.render(graphics, spriteToScreen);
     }
 }
 
