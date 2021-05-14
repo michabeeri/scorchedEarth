@@ -52,7 +52,6 @@ public class Camera {
     public AffineTransform getWorldToScreenTransform(Dimension screenSize) {
         var worldToScreen = new AffineTransform();
         worldToScreen.scale(screenSize.height / (2 * ortographicSize), screenSize.width / (2 * ortographicSize * aspectRatio));
-        System.out.println("wourldToScreen :" + worldToScreen);
         return worldToScreen;
     }
 }

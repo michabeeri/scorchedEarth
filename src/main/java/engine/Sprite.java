@@ -7,23 +7,26 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * represents a sprite sheet image
+ */
 public class Sprite {
-    private String filename;
     private BufferedImage image;
 
-    public Sprite(String filename) {
-        this.filename = filename;
+    private Sprite(BufferedImage image) {
+        this.image = image;
     }
 
+    /**
+     * Renders from the sprite sheet to a graphics2D
+     * @param graphics - Graphics2D to render into
+     * @param transform - manipulate the rendering
+     */
     public void render(Graphics2D graphics, AffineTransform transform) {
         graphics.drawRenderedImage(this.image, transform);
     }
 
-    public void load() throws SpriteLoadException {
-        if (image != null) {
-            throw new SpriteLoadException("Sprite already loaded");
-        }
-
+    public static Sprite load(String filename) throws SpriteLoadException {
         var file = new File(filename);
         if (!file.exists()) {
             throw new SpriteLoadException("File does not exist");
@@ -33,7 +36,8 @@ public class Sprite {
         }
 
         try {
-            image = ImageIO.read(file); //new FileInputStream(file) is not required ?, maybe happens by default
+            BufferedImage image = ImageIO.read(file);
+            return new Sprite(image);
         } catch (IOException e) {
             throw new SpriteLoadException(e);
         }

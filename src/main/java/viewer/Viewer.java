@@ -38,7 +38,7 @@ class Canvas extends JPanel {
     }
 
     protected void paintComponent(Graphics g) {
-        System.out.println("viewer::paintComponent " + this.image);
+        //System.out.println("viewer::paintComponent " + this.image);
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
     }

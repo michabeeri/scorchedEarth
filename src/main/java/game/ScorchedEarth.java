@@ -11,11 +11,11 @@ public class ScorchedEarth {
 
 	public static void main(String args[]) {
 		System.out.println("Scorched started");
-		var backgroundSprite = new Sprite("src/main/resources/background.jpg");
-		var spaceshipSprite = new Sprite("src/main/resources/spaceship.png");
+		Sprite backgroundSprite = null;
+		Sprite spaceshipSprite = null;
 		try {
-			backgroundSprite.load();
-			spaceshipSprite.load();
+			backgroundSprite = Sprite.load("src/main/resources/background.jpg");
+			spaceshipSprite = Sprite.load("src/main/resources/spaceship.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
