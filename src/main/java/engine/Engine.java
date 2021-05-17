@@ -1,8 +1,10 @@
 package engine;
 
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import viewer.*;
 
@@ -36,9 +38,38 @@ public class Engine {
         viewer.setImage(renderedNext);
     }
 
+    public void update(long dt){
+        gameObjects.stream()
+            .forEach(gameObject -> gameObject.getComponentsOfType(Script.class)
+                .forEach(Script -> Script.update(gameObject, dt)));
+    }
+
     public String toString() {
         return gameObjects.toString();
     }
 
-    public void gameLoop() { }
+    public void gameLoop() {
+        long prev_time = System.currentTimeMillis();
+        long dt = 0;
+        long delayTime_ms = 16;
+
+        while(true)
+        {
+            try
+            {
+                Thread.sleep(delayTime_ms);
+            }
+            catch(InterruptedException e)
+            {
+                System.out.println(e);
+            }
+
+            dt = System.currentTimeMillis() - prev_time;
+            prev_time = System.currentTimeMillis();
+
+            update(dt);
+            render();
+        }
+
+    }
 }
