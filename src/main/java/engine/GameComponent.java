@@ -1,7 +1,5 @@
 package engine;
 
-public class GameComponent {
-    public GameComponent clone() {
-        return new GameComponent();
-    }
+public interface GameComponent<T extends GameComponent<T>> {
+    T createCopy();
 }

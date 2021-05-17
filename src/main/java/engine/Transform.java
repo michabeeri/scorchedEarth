@@ -2,7 +2,7 @@ package engine;
 
 import java.awt.geom.Point2D;
 
-public class Transform {
+public class Transform implements GameComponent<Transform>{
     private Point2D.Double position;
     private Point2D.Double scale;
     private double rotation;
@@ -22,7 +22,7 @@ public class Transform {
         this.z = z;
     }
 
-    public Transform clone() {
+    public Transform createCopy() {
         return new Transform(
             new Point2D.Double(position.x, position.y),
             new Point2D.Double(scale.x, scale.y),

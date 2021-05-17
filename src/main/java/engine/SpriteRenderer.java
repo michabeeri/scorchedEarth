@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * Represents an image from a sprite sheet
  */
-public class SpriteRenderer extends GameComponent{
+public class SpriteRenderer implements GameComponent<SpriteRenderer>{
     private Sprite sprite;
     private Rectangle2D.Double imageSpace;
 
@@ -21,7 +21,7 @@ public class SpriteRenderer extends GameComponent{
         this.imageSpace = imageSpace;
     }
 
-    public SpriteRenderer clone() {
+    public SpriteRenderer createCopy() {
         return new SpriteRenderer(
             sprite,
             new Rectangle2D.Double(imageSpace.x, imageSpace.y, imageSpace.width, imageSpace.height)

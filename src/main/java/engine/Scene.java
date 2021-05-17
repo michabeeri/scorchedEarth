@@ -12,7 +12,7 @@ public class Scene {
 
     public List<GameObject> copyGameObjects() {
         return gameObjects.stream()
-                .map(go -> go.clone())
+                .map(go -> go.createCopy())
                 .collect(Collectors.toList());
     }
 }
