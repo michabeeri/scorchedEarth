@@ -13,10 +13,12 @@ public class Engine {
     private Camera camera;
     private List<GameObject> gameObjects = new ArrayList<>();
     private BufferedImage rendererd;
+    private Config config;
 
-    public Engine(Viewer viewer, Camera camera) {
+    public Engine(Viewer viewer, Camera camera, Config config) {
         this.viewer = viewer;
         this.camera = camera;
+        this.config = config;
     }
 
     public void load(Scene scene) {
@@ -38,10 +40,16 @@ public class Engine {
         viewer.setImage(renderedNext);
     }
 
-    public void update(long dt){
+    public void updateScripts(long dt){
         gameObjects.stream()
             .forEach(gameObject -> gameObject.getComponentsOfType(Script.class)
                 .forEach(Script -> Script.update(gameObject, dt)));
+    }
+
+    public void updateRigidBody(long dt){
+        gameObjects.stream()
+            .forEach(gameObject -> gameObject.getComponentsOfType(RigidBody.class)
+                .forEach(RigidBody -> RigidBody.update(gameObject, dt)));
     }
 
     public String toString() {
@@ -51,7 +59,7 @@ public class Engine {
     public void gameLoop() {
         long prev_time = System.currentTimeMillis();
         long dt = 0;
-        long delayTime_ms = 16;
+        long delayTime_ms = Math.round(1000/this.config.getFrameRate());
 
         while(true)
         {
@@ -67,7 +75,8 @@ public class Engine {
             dt = System.currentTimeMillis() - prev_time;
             prev_time = System.currentTimeMillis();
 
-            update(dt);
+            updateRigidBody(dt);
+            updateScripts(dt);
             render();
         }
 

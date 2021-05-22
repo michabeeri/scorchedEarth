@@ -23,7 +23,8 @@ public class ScorchedEarth {
 		var dimention = new Dimension(1000, 500);
 		var viewer = new Viewer(dimention);
 		var camera = new Camera(new Point2D.Double(0, 0), 2.5, 2, new Rectangle2D.Double(0, 0, 1, 1));
-		var gameEngine = new Engine(viewer, camera);
+		var config = new Config();
+		var gameEngine = new Engine(viewer, camera, config);
 		var mainScene = new Scene();
 
 		var background = new GameObject();
@@ -37,6 +38,8 @@ public class ScorchedEarth {
 		spaceship.addComponent(spaceshipRenderer);
 		spaceship.setTransform(new Transform(new Point2D.Double(5, 2.5), new Point2D.Double(1, 1), 45, 0));
 		spaceship.addComponent(new Spaceship());
+		var spaceshipRigidBody = new RigidBody(1, new Point2D.Double(0, 0.001), new Point2D.Double(0, -0.0000002), true);
+		spaceship.addComponent(spaceshipRigidBody);
 		mainScene.add(spaceship);
 
 		gameEngine.load(mainScene);
