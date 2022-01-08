@@ -4,29 +4,24 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.List;
-//import java.util.Map.*;
+import java.util.Map.*;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
 public class GameObject {
-    private List<GameComponent> components;
-//    private ComponentsMap components;
+    private ComponentsMap components;
 
     public GameObject() {
-//        this.components = new ComponentsMap();
-        this.components = new ArrayList<>();
+        this.components = new ComponentsMap();
         this.components.add(new Transform());
     }
 
-    public GameObject(List<GameComponent> components) {
+    public GameObject(ComponentsMap components) {
         this.components = components;
     }
 
     public GameObject createCopy() {
-        return new GameObject(components.stream()
-                .map(gc -> gc.createCopy())
-                .collect(Collectors.toList()));
-//        return new GameObject(components.createCopy());
+        return new GameObject(components.createCopy());
     }
 
     public void addComponent(GameComponent component) {
@@ -34,13 +29,11 @@ public class GameObject {
     }
 
     public <T> Stream<T> getComponentsOfType(Class<T> compClass) {
-        return (Stream<T>) components.stream().filter(gc -> compClass.isInstance(gc));
-//        return components.get(compClass);
+        return components.get(compClass);
     }
 
     public <T> T getComponentOfType(Class<T> compClass) {
-        return getComponentsOfType(compClass).findFirst().get();
-//        return components.first(compClass);
+        return components.first(compClass);
     }
 
     public Transform getTransform() {
@@ -48,8 +41,7 @@ public class GameObject {
     }
 
     public void setTransform(Transform transform) {
-        components.set(components.indexOf(getTransform()), transform);
-//        components.replace(getTransform(), transform);
+        components.replace(getTransform(), transform);
     }
 
     public void render(Graphics2D graphics, AffineTransform worldToScreen) {
@@ -68,50 +60,54 @@ public class GameObject {
     }
 }
 
-//class ComponentsMap {
-//    private Map<Class<GameComponent>, List<GameComponent>> components;
-//
-//    public ComponentsMap() {
-//        components = new HashMap<>();
-//    }
-//
-//    public ComponentsMap(Map<Class<GameComponent>, List<GameComponent>> components) {
-//        this.components = components;
-//    }
-//
-//    public ComponentsMap createCopy() {
-//        return new ComponentsMap(components
-//            .entrySet()
-//            .stream()
-//            .collect(Collectors.toMap(
-//                Entry::getKey,
-//                e -> e.getValue()
-//                    .stream()
-//                    .map(gc -> gc.createCopy())
-//                    .collect(Collectors.toList())
-//            )));
-//    }
-//
-//    public void add(GameComponent component) {
-//        Class compClass = component.getClass();
-//        List<GameComponent> componentsList = components.get(compClass);
-//        if (componentsList == null) {
-//            componentsList = new ArrayList<GameComponent>();
-//            components.put(compClass, componentsList);
-//        }
-//        componentsList.add(component);
-//    }
-//
-//    public void replace(GameComponent componentToReplace, GameComponent replacement) {
-//        List<GameComponent> componentsList = get(replacement.getClass()).collect(Collectors.toList());
-//        componentsList.set(componentsList.indexOf(componentToReplace), replacement);
-//    }
-//
-//    public <T> Stream<T> get(Class<T> compClass) {
-//        return (Stream<T>) components.get(compClass).stream();
-//    }
-//
-//    public <T> T first(Class<T> compClass) {
-//        return get(compClass).findFirst().get();
-//    }
-//}
+class ComponentsMap {
+    private Map<Class<GameComponent>, List<GameComponent>> components;
+
+    public ComponentsMap() {
+        components = new HashMap<>();
+    }
+
+    public ComponentsMap(Map<Class<GameComponent>, List<GameComponent>> components) {
+        this.components = components;
+    }
+
+    public ComponentsMap createCopy() {
+        return new ComponentsMap(components
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                Entry::getKey,
+                e -> e.getValue()
+                    .stream()
+                    .map(gc -> gc.createCopy())
+                    .collect(Collectors.toList())
+            )));
+    }
+
+    public void add(GameComponent component) {
+        Class compClass = component.getClass();
+        List<GameComponent> componentsList = components.get(compClass);
+        if (componentsList == null) {
+            componentsList = new ArrayList<>();
+            components.put(compClass, componentsList);
+        }
+        componentsList.add(component);
+    }
+
+    public void replace(GameComponent componentToReplace, GameComponent replacement) {
+        List<GameComponent> componentsList = components.get(replacement.getClass());
+        componentsList.set(componentsList.indexOf(componentToReplace), replacement);
+    }
+
+    public <T> Stream<T> get(Class<T> compClass) {
+        return (Stream<T>) components.get(compClass).stream();
+    }
+
+    public <T> T first(Class<T> compClass) {
+        return get(compClass).findFirst().get();
+    }
+
+    public void remove(GameComponent component) {
+        components.get(component.getClass()).remove(component);
+    }
+}
