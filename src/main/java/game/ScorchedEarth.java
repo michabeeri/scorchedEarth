@@ -34,12 +34,14 @@ public class ScorchedEarth {
 
 		var spaceship = new GameObject();
 		var spaceshipRenderer = new SpriteRenderer(spaceshipSprite, new Rectangle2D.Double(0, 0, 511, 721));
+		var shipScript = new Ship();
 		spaceship.addComponent(spaceshipRenderer);
 		spaceship.setTransform(new Transform(new Point2D.Double(5, 2.5), new Point2D.Double(1, 1), 45, 0));
+		spaceship.addScript(shipScript);
 		mainScene.add(spaceship);
 
 		gameEngine.load(mainScene);
-		gameEngine.render();
+		//gameEngine.render();
 
 //		try
 //		{

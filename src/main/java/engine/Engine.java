@@ -11,6 +11,8 @@ public class Engine {
     private Camera camera;
     private List<GameObject> gameObjects = new ArrayList<>();
     private BufferedImage rendererd;
+    private long elapsedTime;
+    private long lastRenderTime;
 
     public Engine(Viewer viewer, Camera camera) {
         this.viewer = viewer;
@@ -18,13 +20,26 @@ public class Engine {
     }
 
     public void load(Scene scene) {
-        gameObjects = scene.copyGameObjects();
+        this.gameObjects = scene.copyGameObjects();
+        this.elapsedTime = System.nanoTime();
+        this.lastRenderTime = this.elapsedTime;
+        while(true) {
+            this.render();
+        }
     }
 
     public void render() {
+        var currentTime = System.nanoTime();
+        var deltaTime = currentTime - this.lastRenderTime;
+        this.lastRenderTime = currentTime;
+        var context = new ExecutionContext(deltaTime);
         var screenbSize = viewer.getDimention();
         var renderedNext = new BufferedImage(screenbSize.width, screenbSize.height, BufferedImage.TYPE_INT_RGB);
         var graphicContext = renderedNext.createGraphics();
+
+        gameObjects.stream()
+            .forEach(gameObject -> gameObject.getComponentsOfType(Script.class)
+                .forEach(script -> script.update(gameObject, context)));
 
         var worldToScreen = camera.getWorldToScreenTransform(screenbSize);
         gameObjects.stream()

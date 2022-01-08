@@ -37,6 +37,10 @@ public class Transform implements GameComponent<Transform>{
         this.position = position;
     }
 
+    public void addPosition(Point2D.Double deltaPosition) {
+        this.position = new Point2D.Double(this.position.getX() + deltaPosition.getX(), this.position.getY() + deltaPosition.getY());
+    }
+
     public Point2D.Double getScale() {
         return scale;
     }

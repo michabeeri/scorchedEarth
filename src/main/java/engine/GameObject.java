@@ -28,6 +28,10 @@ public class GameObject {
         components.add(component);
     }
 
+    public void addScript(Script script) {
+        components.add(script, Script.class);
+    }
+
     public <T> Stream<T> getComponentsOfType(Class<T> compClass) {
         return components.get(compClass);
     }
@@ -84,8 +88,7 @@ class ComponentsMap {
             )));
     }
 
-    public void add(GameComponent component) {
-        Class compClass = component.getClass();
+    public void add(GameComponent component, Class compClass) {
         List<GameComponent> componentsList = components.get(compClass);
         if (componentsList == null) {
             componentsList = new ArrayList<>();
@@ -94,13 +97,19 @@ class ComponentsMap {
         componentsList.add(component);
     }
 
+    public void add(GameComponent component) {
+        Class compClass = component.getClass();
+        this.add(component, compClass);
+    }
+
     public void replace(GameComponent componentToReplace, GameComponent replacement) {
         List<GameComponent> componentsList = components.get(replacement.getClass());
         componentsList.set(componentsList.indexOf(componentToReplace), replacement);
     }
 
     public <T> Stream<T> get(Class<T> compClass) {
-        return (Stream<T>) components.get(compClass).stream();
+        var comps = components.get(compClass);
+        return comps != null ? (Stream<T>)comps.stream() : Stream.empty();
     }
 
     public <T> T first(Class<T> compClass) {
