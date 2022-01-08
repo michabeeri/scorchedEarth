@@ -14,14 +14,14 @@ public class ScorchedEarth {
 		Sprite backgroundSprite = null;
 		Sprite spaceshipSprite = null;
 		try {
-			backgroundSprite = Sprite.load("src/main/resources/background.jpg");
+			backgroundSprite = Sprite.load("src/main/resources/bg_normal.jpg");
 			spaceshipSprite = Sprite.load("src/main/resources/spaceship.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		var dimention = new Dimension(1000, 500);
-		var viewer = new Viewer(dimention);
+		var dimension = new Dimension(1000, 500);
+		var viewer = new Viewer(dimension);
 		var camera = new Camera(new Point2D.Double(0, 0), 2.5, 2, new Rectangle2D.Double(0, 0, 1, 1));
 		var gameEngine = new Engine(viewer, camera);
 		var mainScene = new Scene();
